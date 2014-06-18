@@ -166,7 +166,7 @@ public class AbstractMachine {
         if (d == 0) {
             return FP;
         } else {
-            return spp(d - 1, stack[FP + 2], stack[FP + 3]);
+            return sfp(d - 1, stack[FP + 2], stack[FP + 3]);
         }
     }
 

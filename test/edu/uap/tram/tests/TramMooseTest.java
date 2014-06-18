@@ -47,8 +47,33 @@ public class TramMooseTest {
         assertEquals(65, tram.run());
     }
 
+    /**
+     * Tests a bug reported by lutzr on 23rd May 2014.
+     * 
+     * The bug cannot be revealed by a program on this abstract
+     * machine; we just have to look into the stack. Therefore,
+     * this crude set of instructions is a pretty mindfuck.
+     */
     @Test
-    public void testInvokeAndReturn() {
+    public void testInvokeWithDistanceGreaterZero() {
+        tram.load(new Instruction[]{
+                new Instruction(Instruction.CONST, 23),
+                new Instruction(Instruction.INVOKE, 1, 3, 0),
+                new Instruction(Instruction.HALT),
+                new Instruction(Instruction.CONST, 42),
+                new Instruction(Instruction.INVOKE, 1, 6, 0),
+                new Instruction(Instruction.HALT),
+                new Instruction(Instruction.CONST, 2342),
+                new Instruction(Instruction.INVOKE, 1, 9, 1),
+                new Instruction(Instruction.HALT),
+                new Instruction(Instruction.HALT)
+        });
+        tram.run();
+        assertEquals(1, tram.getStackAt(16));    
+    }
+    
+    @Test
+    public void testInvokeAndReturnWithDistanceZero() {
         tram.load(new Instruction[]{
                 new Instruction(Instruction.CONST, 42),
                 new Instruction(Instruction.INVOKE, 1, 4, 0),
