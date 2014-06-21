@@ -1,0 +1,94 @@
+package edu.uap.tripla;
+
+import java_cup.runtime.*;
+
+/**
+ * Grammar for the TRIPLA-Parser.
+ *
+ * @author Richard Kiefer, s4rikief@uni-trier.de
+ */
+
+
+/* Terminals (tokens returned by the scanner). */
+terminal String OP;
+terminal String ID;
+terminal Symbol COMMA, LPAREN, RPAREN, LCPAREN, RCPAREN;
+terminal Symbol LET, IN, EQ, IF, THEN, ELSE, SEMIC;
+terminal Integer CONST;
+
+/* Non terminals */
+non terminal Identifier[] v;
+non terminal Identifier id_;
+non terminal FunctionDeclaration[] d;
+non terminal FunctionDeclaration d_;
+non terminal AbstractSyntaxTree e;
+non terminal ArgumentSequence a;
+
+/* @TODO take care of operators-precedence and -associativity !!! */
+
+/* The grammar */
+start with e;
+
+e ::= LET d:def IN e:exp
+        {: RESULT = new Program(def, exp); :}
+      | id_:id EQ e:exp
+        {: RESULT = new Assignment(id,
+                                   exp);
+         :}
+      | IF e:condition THEN e:consequent ELSE e:alternative
+        {: RESULT = new Conditional(condition,
+                                    consequent,
+                                    alternative);
+         :}
+      | e:e1 OP:o e:e2
+        {: RESULT = new Operation(e1,
+                                  o,
+                                  e2);
+         :}  
+      | e:e1 SEMIC e:e2
+        {: RESULT = new StatementSequence(e1,
+                                          e2);
+         :}
+      | id_:id
+        {: RESULT = id; :}
+      | id_:id LPAREN a:args RPAREN
+        {: RESULT = new FunctionCall(id, args); :}
+      | LPAREN e:exp RPAREN
+        {: RESULT = exp; :}
+      | CONST:c
+        {: RESULT = new Constant(c); :}
+  ;
+
+
+a ::= e:exp
+        {: RESULT = new ArgumentSequence(exp); :}
+      | a:e1 COMMA e:e2
+        {: RESULT = new ArgumentSequence(e1,
+                                         e2);
+         :}
+  ;
+
+
+d ::= d_:def
+          {: RESULT = new FunctionDeclaration[] { def }; :} 
+      | d:d1 d_:d2
+          {: RESULT = d2.appendTo(d1); :} 
+  ;
+d_ ::= id_:id LPAREN v:vars RPAREN LCPAREN e:exp RCPAREN
+         {: RESULT = new FunctionDeclaration(id,
+                                             vars,
+                                             exp);
+          :}
+   ;
+
+
+v ::= id_:v1
+        {: RESULT = new Identifier[] { v1 }; :} 
+      | v:v1 COMMA id_:v2
+        {: RESULT = v2.appendTo(v1); :} 
+  ;
+
+
+id_ ::= ID:ident
+       {: RESULT = new Identifier(ident); :}
+   ;
