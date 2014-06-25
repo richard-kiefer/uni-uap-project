@@ -3,17 +3,17 @@ package edu.uap.tripla;
 import java_cup.runtime.*;
 
 /**
- * Grammar for the TRIPLA-Parser.
+ * Grammar for the TRIPLA-Parser.  
  *
  * @author Richard Kiefer, s4rikief@uni-trier.de
  */
 
 
 /* Terminals (tokens returned by the scanner). */
-terminal String OP;
+terminal String OP, OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_EQ, OP_NEQ, OP_LT, OP_GT;
 terminal String ID;
 terminal Symbol COMMA, LPAREN, RPAREN, LCPAREN, RCPAREN;
-terminal Symbol LET, IN, EQ, IF, THEN, ELSE, SEMIC;
+terminal Symbol LET, IN, ASSIGN, IF, THEN, ELSE, SEMIC;
 terminal Integer CONST;
 
 /* Non terminals */
@@ -23,15 +23,22 @@ non terminal FunctionDeclaration[] d;
 non terminal FunctionDeclaration d_;
 non terminal AbstractSyntaxTree e;
 non terminal ArgumentSequence a;
+non terminal Operation op_;
 
 /* @TODO take care of operators-precedence and -associativity !!! */
+
+/* Precedences */
+precedence left OP_EQ, OP_NEQ;
+precedence left OP_LT, OP_GT;
+precedence left OP_ADD, OP_SUB;
+precedence left OP_MULT, OP_DIV;
 
 /* The grammar */
 start with e;
 
 e ::= LET d:def IN e:exp
         {: RESULT = new Program(def, exp); :}
-      | id_:id EQ e:exp
+      | id_:id ASSIGN e:exp
         {: RESULT = new Assignment(id,
                                    exp);
          :}
@@ -40,11 +47,8 @@ e ::= LET d:def IN e:exp
                                     consequent,
                                     alternative);
          :}
-      | e:e1 OP:o e:e2
-        {: RESULT = new Operation(e1,
-                                  o,
-                                  e2);
-         :}  
+      | op_:op
+        {: RESULT = op; :}
       | e:e1 SEMIC e:e2
         {: RESULT = new StatementSequence(e1,
                                           e2);
@@ -59,6 +63,24 @@ e ::= LET d:def IN e:exp
         {: RESULT = new Constant(c); :}
   ;
 
+
+op_ ::= e:e1 OP_ADD:o e:e2
+        {: RESULT = new Operation(e1, o, e2); :}  
+      | e:e1 OP_SUB:o e:e2
+        {: RESULT = new Operation(e1, o, e2); :}
+      | e:e1 OP_MULT:o e:e2
+        {: RESULT = new Operation(e1, o, e2); :}
+      | e:e1 OP_DIV:o e:e2
+        {: RESULT = new Operation(e1, o, e2); :}
+      | e:e1 OP_EQ:o e:e2
+        {: RESULT = new Operation(e1, o, e2); :}
+      | e:e1 OP_NEQ:o e:e2
+        {: RESULT = new Operation(e1, o, e2); :}
+      | e:e1 OP_LT:o e:e2
+        {: RESULT = new Operation(e1, o, e2); :}
+      | e:e1 OP_GT:o e:e2
+        {: RESULT = new Operation(e1, o, e2); :}
+    ;
 
 a ::= e:exp
         {: RESULT = new ArgumentSequence(exp); :}
