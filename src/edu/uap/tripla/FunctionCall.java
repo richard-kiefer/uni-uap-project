@@ -9,10 +9,10 @@ package edu.uap.tripla;
 public class FunctionCall extends AbstractSyntaxTree {
 
     Identifier name;
-    ArgumentSequence argument_list;
+    AbstractSyntaxTree[] arguments;
     
-    public FunctionCall(Identifier name, ArgumentSequence parameters) {
+    public FunctionCall(Identifier name, AbstractSyntaxTree[] parameters) {
         this.name = name;
-        this.argument_list = parameters;
+        this.arguments = parameters;
     }
 }

@@ -22,12 +22,14 @@ non terminal Identifier id_;
 non terminal FunctionDeclaration[] d;
 non terminal FunctionDeclaration d_;
 non terminal AbstractSyntaxTree e;
-non terminal ArgumentSequence a;
+non terminal AbstractSyntaxTree[] a;
 non terminal Operation op_;
 
 /* @TODO take care of operators-precedence and -associativity !!! */
 
 /* Precedences */
+precedence left SEMIC;
+precedence left ASSIGN;
 precedence left OP_EQ, OP_NEQ;
 precedence left OP_LT, OP_GT;
 precedence left OP_ADD, OP_SUB;
@@ -83,11 +85,9 @@ op_ ::= e:e1 OP_ADD:o e:e2
     ;
 
 a ::= e:exp
-        {: RESULT = new ArgumentSequence(exp); :}
+        {: RESULT = new AbstractSyntaxTree[] { exp }; :}
       | a:e1 COMMA e:e2
-        {: RESULT = new ArgumentSequence(e1,
-                                         e2);
-         :}
+        {: RESULT = e2.appendTo(e1); :}
   ;
 
 

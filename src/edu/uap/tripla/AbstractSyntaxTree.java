@@ -89,4 +89,23 @@ public class AbstractSyntaxTree {
         System.out.println(indent + "}");
     }
     
+    /**
+     * Appends this object to a given array of abstract-syntax-trees
+     * and returns the result as a new array.
+     * 
+     * @param array The array this object shall be appended to.
+     * @return The new array with this object appended to.
+     */
+    public AbstractSyntaxTree[] appendTo(AbstractSyntaxTree[] array) {
+        AbstractSyntaxTree[] new_array = new AbstractSyntaxTree[array.length + 1];
+        
+        int n = 0;
+        for (AbstractSyntaxTree ast: array) {
+            new_array[n++] = ast;
+        }
+        new_array[n] = this;
+        
+        return new_array;
+    }
+    
 }
