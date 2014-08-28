@@ -1,10 +1,10 @@
-package edu.uap.tripla.tests;
+package edu.uap.tripla.parser.tests;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.uap.tripla.TriplaParser;
+import edu.uap.tripla.parser.TriplaParser;
 
 
 /**

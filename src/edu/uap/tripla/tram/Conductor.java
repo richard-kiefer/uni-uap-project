@@ -1,4 +1,4 @@
-package edu.uap.tram;
+package edu.uap.tripla.tram;
 
 /** Main program, driving the TRAM.
  * 

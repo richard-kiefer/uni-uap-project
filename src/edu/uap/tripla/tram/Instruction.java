@@ -2,7 +2,7 @@
  *  Instructions for TRAM 2012
  */
 
-package edu.uap.tram;
+package edu.uap.tripla.tram;
 
 public class Instruction
 {

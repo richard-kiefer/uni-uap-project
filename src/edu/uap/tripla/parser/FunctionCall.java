@@ -1,4 +1,4 @@
-package edu.uap.tripla;
+package edu.uap.tripla.parser;
 
 
 /**

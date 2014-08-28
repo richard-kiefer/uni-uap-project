@@ -1,4 +1,4 @@
-package edu.uap.tram;
+package edu.uap.tripla.tram;
 
 /**
  * Trier Abstract Machine (TRAM) is a virtual machine for the functional

@@ -1,7 +1,10 @@
-package edu.uap.tripla;
+package edu.uap.tripla.parser;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+
+import edu.uap.tripla.parser.Tokenizer;
+import edu.uap.tripla.parser.parser;
 
 import java_cup.runtime.Symbol;
 

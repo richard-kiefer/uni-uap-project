@@ -1,4 +1,4 @@
-package edu.uap.tram;
+package edu.uap.tripla.tram;
 
 /**
  * Collection of example programs for the TRAM.

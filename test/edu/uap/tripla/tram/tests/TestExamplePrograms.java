@@ -1,12 +1,12 @@
-package edu.uap.tram.tests;
+package edu.uap.tripla.tram.tests;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.uap.tram.AbstractMachine;
-import edu.uap.tram.ExamplePrograms;
+import edu.uap.tripla.tram.AbstractMachine;
+import edu.uap.tripla.tram.ExamplePrograms;
 
 public class TestExamplePrograms {
 
