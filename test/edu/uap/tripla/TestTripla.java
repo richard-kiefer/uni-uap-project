@@ -42,9 +42,6 @@ public class TestTripla {
 
     @Test
     public void testNestedFunctions() {
-        /** @fixme ... the following doesn't work. Something's wrong with
-         *         retrieving the right frame for accessing the parameter 'a'.
-         */
         int result = Tripla.run("let x(a) { let y(b) { let z(c) { if (c == 0) then a else y(c) } in z(b-1) } in y(a) } in x(3)");
         assertEquals(3, result);
         
