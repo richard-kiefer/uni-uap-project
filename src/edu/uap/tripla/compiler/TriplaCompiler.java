@@ -75,6 +75,12 @@ public class TriplaCompiler {
         else if (ast instanceof Program) {
             return code((Program)ast);
         }
+        else if (ast instanceof FunctionDeclaration) {
+            return code((FunctionDeclaration)ast);
+        }        
+        else if (ast instanceof VariableDeclaration) {
+            return code((VariableDeclaration)ast);
+        }        
         else if (ast instanceof FunctionCall) {
             return code((FunctionCall)ast);
         }
@@ -165,21 +171,45 @@ public class TriplaCompiler {
     private static List<Instruction> code(Program p) {
         AddressEnvironment old_rho = rho;
         rho = new AddressEnvironment(old_rho);
+        rho.increaseNestingLevel();
         rho.elab_def(p);
+        nestingLevel++;
         
         List<Instruction> r = new LinkedList<Instruction>();
+        List<Instruction> function_decl = new LinkedList<Instruction>();
+        List<Instruction> variable_decl = new LinkedList<Instruction>();
+        List<Instruction> variable_init = new LinkedList<Instruction>();
 
-        int label = labelProvider.getNewLabel();
-        r.add(new Instruction(Instruction.GOTO, label));
+        int label1 = labelProvider.getNewLabel();
+        int label2 = labelProvider.getNewLabel();
         
-        for (FunctionDeclaration fd: p.getDeclarations()) {
-            r.addAll(code(fd));
+        int numberOfVariables = 0;
+        variable_decl.add(new Instruction(Instruction.NOP));
+        variable_init.add(new Instruction(Instruction.NOP));
+        for (AbstractSyntaxTree d: p.getDeclarations()) {
+            if (d instanceof FunctionDeclaration) {
+                function_decl.addAll(code(d));
+            }
+            else { // should be declaration of a variable
+                numberOfVariables++;
+                variable_decl.addAll(code(d));
+                variable_init.add(new Instruction(Instruction.CONST, 0));
+            }
         }
-        
         List<Instruction> body = code(p.getBody());
-        labelProvider.registerInstruction(label, body.get(0));
+        
+        r.add(new Instruction(Instruction.GOTO, label1));
+        r.addAll(function_decl);
+        r.addAll(variable_decl);
         r.addAll(body);
+        r.add(new Instruction(Instruction.RETURN));
+        r.addAll(variable_init);        
+        r.add(new Instruction(Instruction.INVOKE, numberOfVariables, label2, 0));
 
+        labelProvider.registerInstruction(label1, variable_init.get(0));
+        labelProvider.registerInstruction(label2, variable_decl.get(0));
+
+        nestingLevel--;
         rho = old_rho;
         return r;
     }
@@ -199,6 +229,16 @@ public class TriplaCompiler {
         nestingLevel--;
         rho = old_rho;
         return body;        
+    }
+    
+    /** @see List<Instruction> code(AbstractSyntaxTree) */
+    private static List<Instruction> code(VariableDeclaration vd) {
+        List<Instruction> r = code(vd.getExpression());
+        r.add(new Instruction(Instruction.STORE,
+                              rho.get(vd.getVariable()).location,
+                              0
+              ));
+        return r;        
     }
     
     /** @see List<Instruction> code(AbstractSyntaxTree) */

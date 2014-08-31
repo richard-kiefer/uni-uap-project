@@ -70,5 +70,22 @@ public class TestTripla {
     }
     
     
+    public void testVariables() {
+        int result = Tripla.run("let var pi = 3 in pi");
+        assertEquals(3, result);
+        
+        result = Tripla.run("let var pi = 3 x(a) { a*pi } in x(2)");
+        assertEquals(6, result);
+        
+        result = Tripla.run("let var pi = 3 x(pi) { pi } in x(4)");
+        assertEquals(4, result);
+        
+        result = Tripla.run("let var pi = 42 x(pi) { pi = 5 } y(b) { pi } in x(1); y(23)");
+        assertEquals(42, result);
+        
+        result = Tripla.run("let var pi = 3 x(a) { pi = a } y(b) { pi } in x(23); y(42)");
+        assertEquals(23, result);
+        
+    }
 
 }

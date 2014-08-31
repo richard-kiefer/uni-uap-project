@@ -7,15 +7,15 @@ package edu.uap.tripla.parser;
  */
 public class Program extends AbstractSyntaxTree {
 
-    FunctionDeclaration[] declarations;
+    AbstractSyntaxTree[] declarations;
     AbstractSyntaxTree body;
     
-    public Program(FunctionDeclaration[] f, AbstractSyntaxTree e) {
+    public Program(AbstractSyntaxTree[] f, AbstractSyntaxTree e) {
         declarations = f;
         body = e;
     }
     
-    public FunctionDeclaration[] getDeclarations() {
+    public AbstractSyntaxTree[] getDeclarations() {
         return declarations;
     }
     

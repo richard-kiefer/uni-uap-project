@@ -10,10 +10,11 @@ public class ExemplaryUse {
         public static void main(String argv[]) {
             String sourcecode = 
                     "let\n" +
+                    "  var one = 1\n" +
                     "  factorial(number) {" +
                     "    print(number) ; \n" +
                     "    if (number == 0) then\n" +
-                    "      1\n" +
+                    "      one\n" +
                     "    else\n" +
                     "      number * factorial(number - 1)" + 
                     "  }\n" +

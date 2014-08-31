@@ -160,8 +160,13 @@ class AddressEnvironment {
      * @param p The let-in node.
      */
     public void elab_def(Program p) {
-        for (FunctionDeclaration fd : p.getDeclarations()) {
-            put(fd);
+        for (AbstractSyntaxTree d : p.getDeclarations()) {
+            if (d instanceof FunctionDeclaration) {
+                put((FunctionDeclaration)d);
+            }
+            else { // should be declaration of variable
+                put(((VariableDeclaration)d).getVariable());
+            }
         }
     }
 
