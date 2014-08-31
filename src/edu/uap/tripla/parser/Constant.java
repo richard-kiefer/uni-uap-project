@@ -11,6 +11,10 @@ public class Constant extends AbstractSyntaxTree {
     public Constant(Integer value) {
         this.value = value;
     }
+    
+    public int getValue() {
+        return value;
+    }
 
 
 }

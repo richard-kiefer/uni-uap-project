@@ -31,4 +31,8 @@ public class Identifier extends AbstractSyntaxTree {
         return new_array;
     }
     
+    public String getName() {
+        return name;
+    }
+    
 }

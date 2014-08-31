@@ -14,4 +14,11 @@ public class Assignment extends AbstractSyntaxTree {
         this.expression = exp;
     }
     
+    public Identifier getVariable() {
+        return variable;
+    }
+    public AbstractSyntaxTree getExpression() {
+        return expression;
+    }
+    
 }

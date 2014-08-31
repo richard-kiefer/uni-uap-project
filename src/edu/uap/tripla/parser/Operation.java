@@ -15,4 +15,16 @@ public class Operation extends AbstractSyntaxTree {
         operator = op;
         operand_right = or;
     }
+    
+    public AbstractSyntaxTree getOperandLeft() {
+        return operand_left;
+    }
+
+    public AbstractSyntaxTree getOperandRight() {
+        return operand_right;
+    }
+    
+    public String getOperator() {
+        return operator;
+    }
 }

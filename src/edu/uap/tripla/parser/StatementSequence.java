@@ -49,4 +49,8 @@ public class StatementSequence extends AbstractSyntaxTree {
             i++;
         }
     }
+    
+    public AbstractSyntaxTree[] getStatements() {
+        return statements;
+    }
 }

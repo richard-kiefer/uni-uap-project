@@ -23,7 +23,7 @@ public class TriplaParser {
      * Parses given code and returns the corresponding abstract syntax
      * tree on success. Throws exception if parsing fails.
      * 
-     * @param is The code.
+     * @param string The code.
      * @return The abstract syntax tree.
      * @throws java.lang.Exception
      */

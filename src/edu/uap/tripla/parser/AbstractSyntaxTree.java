@@ -15,8 +15,8 @@ import java.lang.reflect.Field;
  * 
  * @author Richard Kiefer, s4rikief@uni-trier.de
  */
-public class AbstractSyntaxTree {
-
+public class AbstractSyntaxTree {    
+    
     /**
      * Traverses the tree in depth-first order and outputs
      * a serialized representation in YAML on System.out.
@@ -56,6 +56,7 @@ public class AbstractSyntaxTree {
         // cf. http://stackoverflow.com/a/4903603
         String indent = new String(new char[depth]).replace("\0", indentation);
         String indent2 = indent + indentation; 
+        
         for (Field f : getClass().getDeclaredFields()) {
             String name = f.getName();
             System.out.print(indent2 + name + ": ");

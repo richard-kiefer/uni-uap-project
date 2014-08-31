@@ -17,4 +17,16 @@ public class Conditional extends AbstractSyntaxTree {
         this.consequent = consequent;
         this.alternative = alternative;
     }
+    
+    public AbstractSyntaxTree getCondition() {
+        return condition;
+    }
+    
+    public AbstractSyntaxTree getConsequent() {
+        return consequent;
+    }
+    
+    public AbstractSyntaxTree getAlternative() {
+        return alternative;
+    }
 }

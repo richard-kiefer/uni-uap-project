@@ -33,12 +33,13 @@ public class ExemplaryParse
     
     static String code2 = "1; 2 < 3; 4";
     static String code3 = "1; two = 3 < 4; 5";
+    static String code4 = "foo = bar = 42";    
     
     public static void main(String argv[])
     {
         try 
         {
-            AbstractSyntaxTree ast = TriplaParser.parse(code3);
+            AbstractSyntaxTree ast = TriplaParser.parse(code4);
             ast.print();
         }
         catch (Exception e) 

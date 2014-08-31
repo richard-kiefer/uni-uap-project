@@ -14,4 +14,12 @@ public class Program extends AbstractSyntaxTree {
         declarations = f;
         body = e;
     }
+    
+    public FunctionDeclaration[] getDeclarations() {
+        return declarations;
+    }
+    
+    public AbstractSyntaxTree getBody() {
+        return body;
+    }
 }

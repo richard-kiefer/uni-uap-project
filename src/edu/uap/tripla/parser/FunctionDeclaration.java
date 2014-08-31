@@ -36,4 +36,16 @@ public class FunctionDeclaration extends AbstractSyntaxTree {
         
         return new_array;
     }
+    
+    public String getSignature() {
+        return String.format("%s/%d", name.getName(), parameters.length);
+    }
+    
+    public Identifier[] getParameters() {
+        return parameters;
+    }
+    
+    public AbstractSyntaxTree getBody() {
+        return body;
+    }
 }
