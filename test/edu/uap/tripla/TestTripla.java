@@ -4,6 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Provides very high-level tests. Given TRIPLA source code
+ * and the expected results, all components are run through
+ * at once, i.e. parser, compiler, address environment and
+ * abstract machine. 
+ *  
+ * @author Richard Kiefer, s4rikief@uni-trier.de
+ */
 
 public class TestTripla {
     static String code1 = "42;" +
@@ -48,5 +56,19 @@ public class TestTripla {
         result = Tripla.run("let x(a) { let y(b) { a } in y(3*a) } in x(5)");
         assertEquals(5, result);
     }
+    
+    @Test
+    public void testBuiltInFunctions() {
+        int result = Tripla.run("let x(a) { print(a) } in x(23)");
+        assertEquals(23, result);
+
+        result = Tripla.run("let x(a) { print(a) } in print(13)");
+        assertEquals(13, result);
+
+        result = Tripla.run("let print(a) { 42 } in print(23)");
+        assertEquals(42, result);
+    }
+    
+    
 
 }

@@ -28,6 +28,7 @@ public class AbstractMachine {
     /** Points to the upmost used stack cell. */ 
     private int TOP;
     
+
     public AbstractMachine() {
         reset();
     }
@@ -140,16 +141,31 @@ public class AbstractMachine {
     }
 
     private void _invoke(int n, int p, int d) {
-        stack[TOP + 1] = PP;
-        stack[TOP + 2] = FP;
-        stack[TOP + 3] = spp(d, PP, FP);
-        stack[TOP + 4] = sfp(d, PP, FP);
-        stack[TOP + 5] = PC + 1;
-        PP = TOP - n + 1;
-        FP = TOP + 1;
-        TOP = TOP + 5;
-        PC = p;
+        // built-in functions are identified by
+        // invoke-instructions with negative labels.
+        if (p < 0) {
+            int[] parameters = new int[n];
+            for (int i = 1; i <= n; i++) {
+                parameters[i-1] = stack[TOP - n + i];
+            }
+            int result = BuiltInFunction.execute(p, parameters);
+            TOP = TOP - n + 1;
+            stack[TOP] = result; 
+            PC = PC + 1;
+        }
+        else {
+            stack[TOP + 1] = PP;
+            stack[TOP + 2] = FP;
+            stack[TOP + 3] = spp(d, PP, FP);
+            stack[TOP + 4] = sfp(d, PP, FP);
+            stack[TOP + 5] = PC + 1;
+            PP = TOP - n + 1;
+            FP = TOP + 1;
+            TOP = TOP + 5;
+            PC = p;
+        }
     }
+    
     
     /** Determine the d-th previous static parameter pointer.
      */

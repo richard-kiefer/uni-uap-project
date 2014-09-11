@@ -164,8 +164,7 @@ public class TriplaCompiler {
     /** @see List<Instruction> code(AbstractSyntaxTree) */
     private static List<Instruction> code(Program p) {
         AddressEnvironment old_rho = rho;
-        AddressEnvironment new_rho = new AddressEnvironment(old_rho);
-        rho = new_rho;
+        rho = new AddressEnvironment(old_rho);
         rho.elab_def(p);
         
         List<Instruction> r = new LinkedList<Instruction>();

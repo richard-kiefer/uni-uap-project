@@ -1,9 +1,9 @@
 package edu.uap.tripla.compiler;
 
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
 
+import edu.uap.tripla.tram.BuiltInFunction;
 import edu.uap.tripla.tram.Instruction;
 
 /**
@@ -29,7 +29,8 @@ import edu.uap.tripla.tram.Instruction;
 class LabelProvider {
     
     /** The next label to be given. */
-    int label = -1;
+    // Consider labels of built-in functions; skip those!
+    int label = BuiltInFunction.getNextFreeLabel();
     /** Association between labels and machine instructions. */
     Hashtable<Integer, Instruction> associatedInstructions = new Hashtable<Integer,Instruction>();
 

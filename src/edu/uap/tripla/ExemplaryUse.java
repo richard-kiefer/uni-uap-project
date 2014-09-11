@@ -10,7 +10,8 @@ public class ExemplaryUse {
         public static void main(String argv[]) {
             String sourcecode = 
                     "let\n" +
-                    "  factorial(number) {\n" +
+                    "  factorial(number) {" +
+                    "    print(number) ; \n" +
                     "    if (number == 0) then\n" +
                     "      1\n" +
                     "    else\n" +
@@ -18,7 +19,7 @@ public class ExemplaryUse {
                     "  }\n" +
                     "in\n" +
                     "  factorial(5)";
-            int result = Tripla.run(sourcecode, true);
+            int result = Tripla.run(sourcecode, false);
             System.out.println(String.format("Result: %d", result));
         }
 

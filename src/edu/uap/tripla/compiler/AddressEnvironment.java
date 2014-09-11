@@ -4,7 +4,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import edu.uap.tripla.parser.*;
-
+import edu.uap.tripla.tram.BuiltInFunction;
 
 /**
  * Provides the generation of address environments
@@ -24,7 +24,9 @@ class AddressEnvironment {
 
 
     /**
-     * Creates an empty address environment.
+     * Creates an empty address environment, already
+     * including definition of built-in functions, cf.
+     * @see BuiltInFunction.
      * 
      * A LabelProvider must be given, as it is used to
      * request labels for declared functions. The same
@@ -35,7 +37,17 @@ class AddressEnvironment {
      */
     AddressEnvironment(LabelProvider lp) {
         labelProvider = lp;
+        
+        // add definitions of built-in functions
+        for (BuiltInFunction f: BuiltInFunction.getFunctionDefinitions()) {
+            addresses.put(String.format("%s/%d",
+                                        f.getName(),
+                                        f.getParameters()
+                                       ),
+                          new Address(f.getLabel(), 0));
+        }
     }
+
     
     /**
      * Creates a new address environment by copying
