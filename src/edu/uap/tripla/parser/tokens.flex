@@ -56,6 +56,7 @@ Const = 0 | [1-9][0-9]*
     then          { return new Symbol(sym.THEN); }
     else          { return new Symbol(sym.ELSE); }
     var           { return new Symbol(sym.VAR); }
+    lazy          { return new Symbol(sym.LAZY); }
 
     {Id}          { return new Symbol(sym.ID, yytext()); }
 }

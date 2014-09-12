@@ -15,31 +15,28 @@ import java_cup.runtime.Symbol;
 public class ExemplaryParse
 {
     
-    static String code1 = "42;" +
-                          "let" +
-                          "  foo(b, a, r) {" +
-                          "    (b + a) + r " +
-                          "  }" +
-                          "  x(y) {" +
-                          "    42; " + 
-                          "    (if 42 == 23" +
-                          "    then pi = 4; 3" +
-                          "    else ok = true); false" +
-                          "  }" +
-                          "  a(b) {" +
-                          "    foo = bar; 1" +
-                          "  }" +
-                          "in foo(6 * 6; 3, 6, 6)";
-    
-    static String code2 = "1; 2 < 3; 4";
-    static String code3 = "1; two = 3 < 4; 5";
-    static String code4 = "foo = bar = 42";    
-    
     public static void main(String argv[])
     {
+        String code =
+                "42;" +
+                "let" +
+                "  lazy lazyVariable = 23 * 42" +
+                "  foo(b, a, r) {" +
+                "    (b + a) + r " +
+                "  }" +
+                "  x(y) {" +
+                "    42; " + 
+                "    (if 42 == 23" +
+                "    then pi = 4; 3" +
+                "    else ok = true); false" +
+                "  }" +
+                "  a(b) {" +
+                "    foo = bar; 1" +
+                "  }" +
+                "in foo(6 * 6; 3, 6, 6)";
         try 
         {
-            AbstractSyntaxTree ast = TriplaParser.parse(code4);
+            AbstractSyntaxTree ast = TriplaParser.parse(code);
             ast.print();
         }
         catch (Exception e) 

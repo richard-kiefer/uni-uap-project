@@ -14,7 +14,7 @@ terminal String OP, OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_EQ, OP_NEQ, OP_LT, OP_GT
 terminal String ID;
 terminal Symbol COMMA, LPAREN, RPAREN, LCPAREN, RCPAREN;
 terminal Symbol LET, IN, ASSIGN, IF, THEN, ELSE, SEMIC;
-terminal Symbol VAR;
+terminal Symbol VAR, LAZY;
 terminal Integer CONST;
 
 /* Non terminals */
@@ -104,6 +104,8 @@ d_ ::= id_:id LPAREN v:vars RPAREN LCPAREN e:exp RCPAREN
           :}
        | VAR id_:id ASSIGN e:exp
            {: RESULT = new VariableDeclaration(id, exp); :}
+       | LAZY id_:id ASSIGN e:exp
+           {: RESULT = new LazyVariableDeclaration(id, exp); :}
    ;
 
 

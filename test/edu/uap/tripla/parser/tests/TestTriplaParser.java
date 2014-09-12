@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.uap.tripla.parser.TriplaParser;
+import edu.uap.tripla.parser.*;
 
 
 /**
@@ -28,6 +28,25 @@ public class TestTriplaParser {
     @Test(expected=Exception.class)
     public void testSyntaxerrorInSimpleAssignment() throws Exception {
         TriplaParser.parse("a = 3 1");
+    }
+    
+    @Test
+    public void testLazyVariables() throws Exception {
+        AbstractSyntaxTree ast = TriplaParser.parse("let lazy l = 3 in l");
+        if (ast instanceof Program) {
+            Program p = (Program)ast;
+            AbstractSyntaxTree firstDeclaration = p.getDeclarations()[0];
+            if (firstDeclaration instanceof LazyVariableDeclaration) {
+                LazyVariableDeclaration lazyVariable =
+                        (LazyVariableDeclaration)firstDeclaration; 
+                if (lazyVariable.getVariable().getName().equals("l")) {
+                    // success!
+                    return;
+                    // we did not test the expression... :o :)
+                }
+            }
+        }
+        fail("Error on parsing lazy variables.");
     }
 
 }
