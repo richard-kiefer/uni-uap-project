@@ -56,8 +56,11 @@ public class Tripla {
             return ast;
         } catch (Exception e) 
         {
-            e.printStackTrace();
-            return null;
+            // turn checked exception into an unchecked one,
+            // to abort further processing.
+            Error new_e = new Error("Error while parsing.");
+            new_e.setStackTrace(e.getStackTrace());
+            throw new Error(new_e);
         }
     }
     
