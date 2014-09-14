@@ -164,8 +164,14 @@ class AddressEnvironment {
             if (d instanceof FunctionDeclaration) {
                 put((FunctionDeclaration)d);
             }
-            else { // should be declaration of variable
+            else if (d instanceof VariableDeclaration) {
                 put(((VariableDeclaration)d).getVariable());
+            }
+            else if (d instanceof LazyVariableDeclaration) {
+                put(((LazyVariableDeclaration)d).getVariable());
+            }
+            else {
+                throw new Error("Illegal element encountered in declaration.");
             }
         }
     }

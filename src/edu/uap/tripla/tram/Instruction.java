@@ -27,7 +27,10 @@ public class Instruction
 	public final static int HALT = 14;
 	public final static int NOP = 15;
 	public final static int INVOKE = 16;
-	public final static int RETURN = 17;
+    public final static int RETURN = 17;
+    public final static int LAZY = 18;
+    public final static int LAZYRETURN = 19;
+
 
 
 	public Instruction(int opcode, Integer arg1, Integer arg2, Integer arg3)
@@ -160,9 +163,15 @@ public class Instruction
 			case Instruction.INVOKE:
 				retStr += "INVOKE";
 				break;
-			case Instruction.RETURN:
-				retStr += "RETURN";
-				break;
+            case Instruction.RETURN:
+                retStr += "RETURN";
+                break;
+            case Instruction.LAZY:
+                retStr += "LAZY";
+                break;
+            case Instruction.LAZYRETURN:
+                retStr += "LAZYRETURN";
+                break;
 			default:
 				retStr += "ERROR";
 		}

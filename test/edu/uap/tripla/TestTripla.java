@@ -2,6 +2,11 @@ package edu.uap.tripla;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -14,19 +19,19 @@ import org.junit.Test;
  */
 
 public class TestTripla {
-    static String code1 = "42;" +
-            "let" +
-            "  foo(b, a, r) {" +
-            "    (b + a) + r; " +
-            "    let " +
-            "       bar(f, o) {" +
-            "         f*o*b*a*r" +
-            "       }" +
-            "    in bar(2, r)" +
-            "  }" +
-            "in let x(i) { i } in foo(1, 2, 3)";
+    // For testing System.out output,
+    // thanks to http://stackoverflow.com/a/1119559/1242922
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;;  
+    @Before
+    public void setUp() {
+        System.setOut(new PrintStream(outContent));        
+    }    
+    @After
+    public void tearDown() {
+        System.setOut(originalOut);        
+    }
     
-   
     @Test
     public void testParameterAsLocalVariable() {
         int result = Tripla.run("let x(a) { a = 3; a } in x(5)");
@@ -69,7 +74,7 @@ public class TestTripla {
         assertEquals(42, result);
     }
     
-    
+    @Test
     public void testVariables() {
         int result = Tripla.run("let var pi = 3 in pi");
         assertEquals(3, result);
@@ -85,7 +90,97 @@ public class TestTripla {
         
         result = Tripla.run("let var pi = 3 x(a) { pi = a } y(b) { pi } in x(23); y(42)");
         assertEquals(23, result);
-        
     }
 
+    
+    @Test
+    public void testLazyVariables() {
+        String code;
+        int result;
+        
+        code = "let " +
+                "  lazy x = y(0)" +
+                "  var x = 3" +
+                "  y(a) {" +
+                "    print(23)" +
+                "  }" +
+                "in" +
+                "  x";
+        result = Tripla.run(code);
+        assertEquals("", outContent.toString());
+        outContent.reset();
+        
+        code = "let " +
+                "  var x = 3" +
+                "  lazy x = y(0)" +
+                "  y(a) {" +
+                "    print(23)" +
+                "  }" +
+                "in" +
+                "  x";
+        result = Tripla.run(code);
+        assertEquals("23\n", outContent.toString());
+        outContent.reset();
+        
+        code = "let " +
+                "  lazy x = z(0)" +
+                "  z(a) {" +
+                "    print(23)" +
+                "  }" +
+                "in" +
+                "  x = 42; x";
+        result = Tripla.run(code);
+        assertEquals(42, result);
+        assertEquals("", outContent.toString());
+        outContent.reset();
+    }
+    
+    @Test
+    public void testLazyVariablesMoreComplex() {
+        String code;
+        int result;
+        
+        code =
+                "let " + 
+                "  var result = 0 " + 
+                "  lazy end = mult(2, 5) " + 
+                "  mult(x, y) {" +
+                "    x * y" +
+                "  } " + 
+                "  count(start) {" +
+                "    let" +
+                "      lazy final = mult(2, end) " + 
+                "    in" +
+                "      if (start == final) then" +
+                "        result = start " + 
+                "      else" +
+                "        count(start + 1)" +
+                "  } " + 
+                "in" +
+                "  count(0) " +
+                ""; 
+        result = Tripla.run(code);
+        assertEquals(20, result);
+            
+        code =
+            "let " +
+            "  lazy one = one(0)" +
+            "  var two = two(0)" +
+            "  lazy three = three(0)" +
+            "  one(a) {" +
+            "    print(1)" +
+            "  }" +
+            "  two(a) {" +
+            "    print(2)" +
+            "  }" +
+            "  three(a) {" +
+            "    print(3);" +
+            "    3 * one" +
+            "  }" +
+            "in" +
+            "  one; two; three"; 
+        result = Tripla.run(code);
+        assertEquals("2\n1\n3\n", outContent.toString());
+        assertEquals(3, result);
+    }
 }

@@ -88,7 +88,8 @@ class LabelProvider {
                 int absolutePosition = program.indexOf(ri);
                 i.setArg1(absolutePosition);
             }
-            else if (opcode == Instruction.INVOKE) {
+            else if (opcode == Instruction.INVOKE
+                  || opcode == Instruction.LAZY) {
                 int label = i.getArg2();
                 Instruction ri = associatedInstructions.get(label);
                 int absolutePosition = program.indexOf(ri);

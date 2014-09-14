@@ -81,6 +81,9 @@ public class TriplaCompiler {
         else if (ast instanceof VariableDeclaration) {
             return code((VariableDeclaration)ast);
         }        
+        else if (ast instanceof LazyVariableDeclaration) {
+            return code((LazyVariableDeclaration)ast);
+        }        
         else if (ast instanceof FunctionCall) {
             return code((FunctionCall)ast);
         }
@@ -190,7 +193,7 @@ public class TriplaCompiler {
             if (d instanceof FunctionDeclaration) {
                 function_decl.addAll(code(d));
             }
-            else { // should be declaration of a variable
+            else { // should be declaration of a (lazy) variable
                 numberOfVariables++;
                 variable_decl.addAll(code(d));
                 variable_init.add(new Instruction(Instruction.CONST, 0));
@@ -238,6 +241,30 @@ public class TriplaCompiler {
                               rho.get(vd.getVariable()).location,
                               0
               ));
+        return r;        
+    }
+    
+    /** @see List<Instruction> code(AbstractSyntaxTree) */
+    private static List<Instruction> code(LazyVariableDeclaration lvd) {
+        int label1 = labelProvider.getNewLabel();
+        int label2 = labelProvider.getNewLabel();
+        
+        List<Instruction> r = new LinkedList<Instruction>();
+        List<Instruction> code_e = code(lvd.getExpression());
+        Instruction code_lazy = new Instruction(
+                                    Instruction.LAZY,
+                                    rho.get(lvd.getVariable()).location,
+                                    label2
+                                );
+        
+        labelProvider.registerInstruction(label1, code_lazy);
+        labelProvider.registerInstruction(label2, code_e.get(0));
+        
+        r.add(new Instruction(Instruction.GOTO, label1));
+        r.addAll(code_e);
+        r.add(new Instruction(Instruction.LAZYRETURN));
+        r.add(code_lazy);
+        
         return r;        
     }
     
